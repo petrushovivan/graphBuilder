@@ -2,6 +2,9 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QUdpSocket>
+#include <QTcpServer>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -14,8 +17,19 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+public slots:
+    udpSocketReadyRead();
 
 private:
+
+    ushort udpPort;
+    ushort tcpPort;
+
+    QUdpSocket *udpSocket;
+
+    // TCP-сервер. Позволяет принимать входящие соединения.
+    QTcpServer *tcpServer;
+
     Ui::Widget *ui;
 };
 #endif // WIDGET_H
