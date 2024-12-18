@@ -29,6 +29,7 @@ private slots:
     void calculatePoints(int left, int right);
     void discovery();
     void udpSocketReadyRead();
+    void disconectedFromServer();
 
 private:
     QVector<QPointF> points;

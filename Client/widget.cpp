@@ -14,13 +14,14 @@ Widget::Widget(QWidget *parent)
 
     ui->frameConnected->setStyleSheet("background-color: red;");
 
-
     udpSocket = new QUdpSocket(this);
     tcpSocket = new QTcpSocket(this);
     timer = new QTimer(this);
 
     connect(udpSocket, &QUdpSocket::readyRead, this, &Widget::udpSocketReadyRead);
     connect(timer, &QTimer::timeout, this, &Widget::discovery);
+
+    connect(tcpSocket, &QTcpSocket::disconnected, this, &Widget::disconectedFromServer);
     discovery();
     timer->start(500);
 }
@@ -38,7 +39,9 @@ void Widget::on_pushButtonSend_clicked()
         QMessageBox::information(this, "Внимание!", "Введен неверный промежуток");
         return;
     }
+
     calculatePoints(leftVaue, rightValue);
+
 
 }
 

@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     connectToserver.cpp \
+    disconectedFromServer.cpp \
     main.cpp \
     widget.cpp
 

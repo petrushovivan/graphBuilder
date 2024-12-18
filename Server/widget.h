@@ -5,6 +5,8 @@
 #include <QUdpSocket>
 #include <QTcpServer>
 #include <QMessageBox>
+#include <QNetworkDatagram>
+#include <QPainter>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -18,9 +20,16 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 public slots:
-    udpSocketReadyRead();
+    void udpSocketReadyRead();
+protected:
+    void paintEvent(QPaintEvent *) override;
 
 private:
+    void drawCoordinateSystem();
+    void drawGrid();
+
+
+    QPainter *painter;
 
     ushort udpPort;
     ushort tcpPort;
