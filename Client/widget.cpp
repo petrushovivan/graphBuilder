@@ -42,7 +42,9 @@ void Widget::on_pushButtonSend_clicked()
 
     calculatePoints(leftVaue, rightValue);
 
+    QByteArray pointsInByte = preparePoints();
 
+    tcpSocket->write(pointsInByte);
 }
 
 void Widget::calculatePoints(int leftValue, int rightValue)
@@ -54,8 +56,27 @@ void Widget::calculatePoints(int leftValue, int rightValue)
     int freeMember = ui->spinBoxFreeMember->value();
 
     for(double i = leftValue; i<=rightValue; i+= 0.5){
-        int y = pow(i, power) + (coefficient * i) + freeMember;
-        QPoint point(i, y);
+        long long y = pow(i, power) + (coefficient * i) + freeMember;
+        QPoint point((long long)i, y);
+        qDebug()<<QString::number(i) +" " + QString::number(y);
         points.append(point);
     }
+}
+
+QByteArray Widget::preparePoints(){
+    QString str;
+    str.clear();
+    for(QPointF p: points){
+        str.append(QString::number(p.x()));
+        str.append(" ");
+        str.append(QString::number(p.y()));
+        str.append(" ");
+    }
+    QByteArray buff = str.toUtf8();
+    unsigned long size = buff.size();
+    QByteArray message;
+    message.append(reinterpret_cast<char*>(&size), sizeof(unsigned long));
+
+    message.append(buff);
+    return message;
 }

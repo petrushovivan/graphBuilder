@@ -11,6 +11,7 @@
 #include <QTcpSocket>
 #include <QTimer>
 #include <QNetworkDatagram>
+#include <QByteArray>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -26,12 +27,18 @@ public:
 
 private slots:
     void on_pushButtonSend_clicked();
+
     void calculatePoints(int left, int right);
+
     void discovery();
+
     void udpSocketReadyRead();
+
     void disconectedFromServer();
 
 private:
+    QByteArray preparePoints();
+
     QVector<QPointF> points;
 
     ushort udpPort;
@@ -39,7 +46,6 @@ private:
     QTimer *timer;
 
     ushort tcpPort;
-    QByteArray readMessage;
     QTcpSocket *tcpSocket;
 
     Ui::Widget *ui;

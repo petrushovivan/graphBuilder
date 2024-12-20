@@ -4,9 +4,16 @@
 #include <QWidget>
 #include <QUdpSocket>
 #include <QTcpServer>
+#include <QTcpSocket>
 #include <QMessageBox>
 #include <QNetworkDatagram>
 #include <QPainter>
+#include <QByteArray>
+#include <QVector>
+#include <QStringList>
+#include <QDebug>
+#include <QString>
+#include <QMouseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -21,15 +28,25 @@ public:
     ~Widget();
 public slots:
     void udpSocketReadyRead();
+    void clientNewConnection();
+    void clientDisconnected();
+    void clientReadyRead();
 protected:
     void paintEvent(QPaintEvent *) override;
 
+    void mousePressEvent(QMouseEvent *event) override;
+
+    void mouseMoveEvent(QMouseEvent *event);
+
 private:
-    void drawCoordinateSystem();
-    void drawGrid();
+    void drawCoordinateSystem(QPainter *painter);
+    void drawGrid(QPainter *painter);
+    void drawGraphic(QPainter *painter);
 
+    QByteArray readMessage;
 
-    QPainter *painter;
+    QPoint lastMousePos;
+    QPoint offset;
 
     ushort udpPort;
     ushort tcpPort;
@@ -38,6 +55,10 @@ private:
 
     // TCP-сервер. Позволяет принимать входящие соединения.
     QTcpServer *tcpServer;
+    QVector<QTcpSocket *> clients;
+    QVector<QVector<QPointF>> userPoints;
+
+    QStringList coordinates;
 
     Ui::Widget *ui;
 };
